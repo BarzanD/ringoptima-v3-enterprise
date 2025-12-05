@@ -4,7 +4,7 @@
 
 import type { Contact, NewContact } from '../types';
 
-/** Parsar CSV-text till 2D-array med korrekt hantering av citattecken */
+/** Parsar CSV-text till 2D-array med korrekt hantering av citattecken och multiline cells */
 export function parseCSV(text: string): string[][] {
   const rows: string[][] = [];
   let currentRow: string[] = [];
@@ -24,6 +24,7 @@ export function parseCSV(text: string): string[][] {
         // End of quoted section
         inQuotes = false;
       } else {
+        // Inuti citerad cell, behåll newlines som del av cellen
         currentCell += char;
       }
     } else {
@@ -35,7 +36,7 @@ export function parseCSV(text: string): string[][] {
         currentRow.push(currentCell.trim());
         currentCell = '';
       } else if (char === '\n' || (char === '\r' && nextChar === '\n')) {
-        // Row delimiter
+        // Row delimiter - endast när vi INTE är inne i en citerad cell
         currentRow.push(currentCell.trim());
         if (currentRow.some(cell => cell !== '')) {
           rows.push(currentRow);
@@ -82,19 +83,35 @@ export function extractPhoneData(
   
   // Regex för att matcha telefonnummer i olika format
   const phonePatterns = [
-    /(\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3})/g, // 070-123 45 67, 0152-154 23
+    /(\d{2,4}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{0,3})/g, // 070-123 45 67, 0152-154 23, 0383-46 47 27
     /(\+\d{10,})/g, // +46701234567
-    /(\d{8,})/g, // 701234567
+    /(\d{7,})/g, // 701234567 (minst 7 siffror)
   ];
   
   const operatorRegex = /(Telia|Tele2|Tre|HI3G|Telenor|Comviq|TeliaSonera|Telness|Advoco|HI3G Access)/gi;
   
   // Enkel telefon från Telefonnummer-kolumnen
   if (simplePhone && simplePhone.trim()) {
-    const normalized = normalizePhone(simplePhone);
-    if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
-      phones.push(normalized);
-      seenPhones.add(normalized);
+    // Försök hitta alla telefonnummer i strängen (kan vara flera)
+    for (const pattern of phonePatterns) {
+      const matches = simplePhone.matchAll(pattern);
+      for (const match of matches) {
+        const phoneStr = match[1];
+        const normalized = normalizePhone(phoneStr);
+        if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
+          phones.push(normalized);
+          seenPhones.add(normalized);
+        }
+      }
+    }
+    
+    // Om inga telefonnummer hittades med pattern, försök normalisera hela strängen
+    if (phones.length === 0) {
+      const normalized = normalizePhone(simplePhone);
+      if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
+        phones.push(normalized);
+        seenPhones.add(normalized);
+      }
     }
   }
   
@@ -102,35 +119,59 @@ export function extractPhoneData(
   if (phoneData) {
     // Försök hitta telefonnummer i strukturerad form
     // Format: "0152-154 23 Skaldjur AB Telia Sverige AB"
+    // Dela upp i rader, men hantera även telefonnummer som inte är på egen rad
     const lines = phoneData.split(/\n/);
     
     for (const line of lines) {
-      // Hitta telefonnummer i början av raden
+      // Hoppa över header-rader och info-text
+      if (line.match(/^(Telefonnummer|Användare|Operatör|Senaste|Tidigare|Typ|Är|Info|Information|Andra|Föregående|Nästa|Kontakta|Lås|Köp)/i)) {
+        continue;
+      }
+      
+      // Hitta telefonnummer i början av raden (format: "0152-154 23" eller "070-123 45 67")
+      // Först försök hitta telefonnummer i början av raden
+      const leadingPhoneMatch = line.match(/^[\s]*(\d{2,4}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{0,3})/);
+      if (leadingPhoneMatch) {
+        const phoneStr = leadingPhoneMatch[1];
+        const normalized = normalizePhone(phoneStr);
+        
+        if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
+          phones.push(normalized);
+          seenPhones.add(normalized);
+          
+          // Extrahera användare (text efter telefonnummer, före operatör)
+          const afterPhone = line.substring(leadingPhoneMatch[0].length);
+          const operatorMatch = afterPhone.match(operatorRegex);
+          if (operatorMatch) {
+            const userText = afterPhone.substring(0, operatorMatch.index).trim();
+            if (userText && userText.length > 2 && !userText.match(/^(Kontakta|Info|Är|Andra|Information|Mobil|Fast|Växel)/i)) {
+              users.push(userText);
+            }
+            
+            // Extrahera operatör
+            const operatorName = operatorMatch[0];
+            if (!operators.includes(operatorName)) {
+              operators.push(operatorName);
+            }
+          }
+        }
+      }
+      
+      // Sök även efter telefonnummer med andra mönster i hela raden
       for (const pattern of phonePatterns) {
         const matches = line.matchAll(pattern);
         for (const match of matches) {
+          // Hoppa över om vi redan hittade detta nummer i början av raden
+          if (leadingPhoneMatch && match.index === leadingPhoneMatch.index) {
+            continue;
+          }
+          
           const phoneStr = match[1];
           const normalized = normalizePhone(phoneStr);
           
           if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
             phones.push(normalized);
             seenPhones.add(normalized);
-            
-            // Extrahera användare (text mellan telefonnummer och operatör)
-            const afterPhone = line.substring(match.index! + match[0].length);
-            const operatorMatch = afterPhone.match(operatorRegex);
-            if (operatorMatch) {
-              const userText = afterPhone.substring(0, operatorMatch.index).trim();
-              if (userText && userText.length > 2 && !userText.match(/^(Kontakta|Info|Är|Andra|Information)/i)) {
-                users.push(userText);
-              }
-              
-              // Extrahera operatör
-              const operatorName = operatorMatch[0];
-              if (!operators.includes(operatorName)) {
-                operators.push(operatorName);
-              }
-            }
           }
         }
       }
@@ -224,11 +265,21 @@ export function transformCSV(rows: string[][], batchId: number): NewContact[] {
   }
   
   // Transformera rader
+  let skippedCount = 0;
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
     
+    // Kontrollera att raden har rätt antal kolumner (minst 7 för att vara en giltig rad)
+    if (row.length < 3) {
+      skippedCount++;
+      continue;
+    }
+    
     const name = row[colName]?.trim() || '';
-    if (!name) continue;
+    if (!name) {
+      skippedCount++;
+      continue;
+    }
     
     const phoneExtract = extractPhoneData(
       colPhone !== -1 ? row[colPhone] || '' : '',
@@ -237,7 +288,10 @@ export function transformCSV(rows: string[][], batchId: number): NewContact[] {
     );
     
     // Skippa om inga telefonnummer
-    if (!phoneExtract.phones) continue;
+    if (!phoneExtract.phones || phoneExtract.phones.trim() === '') {
+      skippedCount++;
+      continue;
+    }
     
     contacts.push({
       batchId,
@@ -254,6 +308,11 @@ export function transformCSV(rows: string[][], batchId: number): NewContact[] {
       priority: 'medium',
       status: 'new',
     });
+  }
+  
+  // Logga statistik om önskat
+  if (skippedCount > 0) {
+    console.log(`CSV Import: ${contacts.length} kontakter importerade, ${skippedCount} rader hoppades över`);
   }
   
   return contacts;

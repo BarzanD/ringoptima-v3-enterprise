@@ -209,9 +209,10 @@ export default function App() {
         throw new Error('Inga giltiga kontakter med telefonnummer hittades i CSV-filen. Kontrollera att filen innehåller telefonnummer.');
       }
       
-      const skippedCount = rows.length - 1 - newContacts.length;
+      const totalRows = rows.length - 1; // Exkludera header
+      const skippedCount = totalRows - newContacts.length;
       if (skippedCount > 0) {
-        toast.info(`${skippedCount} rader exkluderades (saknade telefonnummer)`);
+        toast.info(`${newContacts.length} kontakter importerade av ${totalRows} rader. ${skippedCount} rader exkluderades (saknade telefonnummer eller ogiltigt format)`);
       }
 
       await db.addContacts(newContacts);
