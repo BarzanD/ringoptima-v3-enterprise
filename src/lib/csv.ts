@@ -67,39 +67,71 @@ export function extractPhoneData(
   const phones: string[] = [];
   const users: string[] = [];
   const operators: string[] = [];
+  const seenPhones = new Set<string>();
   
-  // Regex för att matcha telefonnummer med metadata
-  const phoneRegex = /(\d[\d\s-]{6,})\s*(?:\(([^)]*)\))?/g;
-  const operatorRegex = /(Telia|Tele2|Tre|HI3G|Telenor|Comviq)/gi;
+  // Normalisera telefonnummer (ta bort alla icke-siffror utom +)
+  const normalizePhone = (phone: string): string => {
+    return phone.replace(/[^\d+]/g, '');
+  };
   
-  // Enkel telefon
+  // Validera telefonnummer (minst 7 siffror)
+  const isValidPhone = (phone: string): boolean => {
+    const digits = phone.replace(/\D/g, '');
+    return digits.length >= 7;
+  };
+  
+  // Regex för att matcha telefonnummer i olika format
+  const phonePatterns = [
+    /(\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3})/g, // 070-123 45 67, 0152-154 23
+    /(\+\d{10,})/g, // +46701234567
+    /(\d{8,})/g, // 701234567
+  ];
+  
+  const operatorRegex = /(Telia|Tele2|Tre|HI3G|Telenor|Comviq|TeliaSonera|Telness|Advoco|HI3G Access)/gi;
+  
+  // Enkel telefon från Telefonnummer-kolumnen
   if (simplePhone && simplePhone.trim()) {
-    const cleanPhone = simplePhone.replace(/[^\d+]/g, '');
-    if (cleanPhone.length >= 7) {
-      phones.push(cleanPhone);
+    const normalized = normalizePhone(simplePhone);
+    if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
+      phones.push(normalized);
+      seenPhones.add(normalized);
     }
   }
   
-  // Komplex telefondata
+  // Komplex telefondata från Operatör-kolumnen
   if (phoneData) {
-    let match;
-    while ((match = phoneRegex.exec(phoneData)) !== null) {
-      const phone = match[1].replace(/[^\d+]/g, '');
-      const meta = match[2] || '';
-      
-      if (phone.length >= 7 && !phones.includes(phone)) {
-        phones.push(phone);
-        
-        // Extrahera användare
-        const userMatch = meta.match(/^([^,]+)/);
-        if (userMatch) {
-          users.push(userMatch[1].trim());
-        }
-        
-        // Extrahera operatör
-        const opMatch = meta.match(operatorRegex);
-        if (opMatch) {
-          operators.push(opMatch[0]);
+    // Försök hitta telefonnummer i strukturerad form
+    // Format: "0152-154 23 Skaldjur AB Telia Sverige AB"
+    const lines = phoneData.split(/\n/);
+    
+    for (const line of lines) {
+      // Hitta telefonnummer i början av raden
+      for (const pattern of phonePatterns) {
+        const matches = line.matchAll(pattern);
+        for (const match of matches) {
+          const phoneStr = match[1];
+          const normalized = normalizePhone(phoneStr);
+          
+          if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
+            phones.push(normalized);
+            seenPhones.add(normalized);
+            
+            // Extrahera användare (text mellan telefonnummer och operatör)
+            const afterPhone = line.substring(match.index! + match[0].length);
+            const operatorMatch = afterPhone.match(operatorRegex);
+            if (operatorMatch) {
+              const userText = afterPhone.substring(0, operatorMatch.index).trim();
+              if (userText && userText.length > 2 && !userText.match(/^(Kontakta|Info|Är|Andra|Information)/i)) {
+                users.push(userText);
+              }
+              
+              // Extrahera operatör
+              const operatorName = operatorMatch[0];
+              if (!operators.includes(operatorName)) {
+                operators.push(operatorName);
+              }
+            }
+          }
         }
       }
     }
@@ -108,30 +140,46 @@ export function extractPhoneData(
   // Styrelsedata
   if (styrelseData) {
     const lines = styrelseData.split(/[;\n]/);
-    lines.forEach(line => {
-      const phoneMatch = line.match(/(\d[\d\s-]{6,})/);
-      if (phoneMatch) {
-        const phone = phoneMatch[1].replace(/[^\d+]/g, '');
-        if (phone.length >= 7 && !phones.includes(phone)) {
-          phones.push(phone);
+    for (const line of lines) {
+      // Hitta telefonnummer
+      for (const pattern of phonePatterns) {
+        const matches = line.matchAll(pattern);
+        for (const match of matches) {
+          const phoneStr = match[1];
+          const normalized = normalizePhone(phoneStr);
           
-          // Försök extrahera namn före telefon
-          const nameMatch = line.match(/^([^0-9]+)/);
-          if (nameMatch) {
-            const name = nameMatch[1].replace(/[,;]/g, '').trim();
-            if (name.length > 2) {
-              users.push(name);
+          if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
+            phones.push(normalized);
+            seenPhones.add(normalized);
+            
+            // Försök extrahera namn före telefon
+            const beforePhone = line.substring(0, match.index);
+            const nameMatch = beforePhone.match(/([A-ZÅÄÖ][a-zåäö]+(?:\s+[A-ZÅÄÖ][a-zåäö]+)*)/);
+            if (nameMatch) {
+              const name = nameMatch[1].trim();
+              if (name.length > 2 && !name.match(/^(Org|Ordförande|Verkställande|Extern|E-post|Hemsida)/i)) {
+                users.push(name);
+              }
             }
-          }
-          
-          // Operatör från rad
-          const opMatch = line.match(operatorRegex);
-          if (opMatch) {
-            operators.push(opMatch[0]);
+            
+            // Operatör från rad
+            const opMatch = line.match(operatorRegex);
+            if (opMatch && !operators.includes(opMatch[0])) {
+              operators.push(opMatch[0]);
+            }
           }
         }
       }
-    });
+    }
+  }
+  
+  // Om inga telefonnummer hittades, returnera tom sträng
+  if (phones.length === 0) {
+    return {
+      phones: '',
+      users: '',
+      operators: '',
+    };
   }
   
   return {
@@ -163,8 +211,8 @@ export function transformCSV(rows: string[][], batchId: number): NewContact[] {
   const colOrg = findColumn('org', 'organisationsnummer', 'orgnr');
   const colAddress = findColumn('adress', 'address', 'gatuadress');
   const colCity = findColumn('ort', 'stad', 'city', 'postort');
-  const colPhone = findColumn('telefon', 'phone', 'tel');
-  const colPhoneData = findColumn('telefondata', 'phonedata', 'teldata');
+  const colPhone = findColumn('telefonnummer', 'telefon', 'phone', 'tel');
+  const colPhoneData = findColumn('operatör', 'telefondata', 'phonedata', 'teldata');
   const colStyrelse = findColumn('styrelse', 'board', 'ledning');
   const colContact = findColumn('kontaktperson', 'kontakt', 'contact');
   const colRole = findColumn('roll', 'titel', 'role', 'position', 'befattning');

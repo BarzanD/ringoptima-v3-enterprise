@@ -157,7 +157,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className={cn(
-          'fixed inset-0 z-50',
+          'fixed inset-0 z-[100]',
           isMobile ? 'mobile-modal-overlay' : 'bg-black/40 backdrop-blur-sm'
         )}
         onClick={onClose}
@@ -171,7 +171,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
         className={cn(
           isMobile
             ? 'mobile-modal-sheet'
-            : 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl glass-card bg-white'
+            : 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl glass-card bg-white shadow-2xl'
         )}
         role="dialog"
         aria-modal="true"
@@ -214,7 +214,8 @@ const ContactDetailModal = memo(function ContactDetailModal({
         {/* Content */}
           <div className={cn(
             'overflow-y-auto p-6 space-y-6 bg-white',
-            isMobile && 'mobile-modal-body'
+            isMobile && 'mobile-modal-body',
+            'max-h-[calc(90vh-120px)]'
           )}>
           {/* Quick Actions */}
           <div className="flex flex-wrap gap-2">

@@ -206,7 +206,12 @@ export default function App() {
       const newContacts = transformCSV(rows, batchId);
       
       if (newContacts.length === 0) {
-        throw new Error('Inga giltiga kontakter hittades i CSV-filen');
+        throw new Error('Inga giltiga kontakter med telefonnummer hittades i CSV-filen. Kontrollera att filen innehåller telefonnummer.');
+      }
+      
+      const skippedCount = rows.length - 1 - newContacts.length;
+      if (skippedCount > 0) {
+        toast.info(`${skippedCount} rader exkluderades (saknade telefonnummer)`);
       }
 
       await db.addContacts(newContacts);
