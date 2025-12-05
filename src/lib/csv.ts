@@ -149,6 +149,7 @@ export function extractPhoneData(
           // Extrahera användare (text efter telefonnummer, före operatör)
           const afterPhone = trimmedLine.substring(leadingPhoneMatch[0].length);
           const operatorMatch = afterPhone.match(operatorRegex);
+          
           if (operatorMatch) {
             const userText = afterPhone.substring(0, operatorMatch.index).trim();
             
@@ -156,23 +157,33 @@ export function extractPhoneData(
             if (userText && userText.length > 2) {
               // Ta bort allt efter första företagsnamnet/personnamnet
               // Format: "Kanyakorn Thai Massage AB Tele2 Sverige AB Kontakta oss! Kontakta oss! Mobil"
-              // Vi vill bara ha: "Kanyakorn Thai Massage"
+              // Vi vill bara ha: "Kanyakorn Thai Massage" eller personnamn som "Annika", "Victor"
               
-              // Ta bort "AB", "Aktiebolag", "Kontakta oss!", "Sverige AB", "Mobil", "Fast", etc.
-              let cleanUser = userText
-                .replace(/\s+(AB|Aktiebolag).*$/i, '') // Ta bort allt efter "AB" eller "Aktiebolag"
-                .replace(/\s+(Kontakta\s+oss!|mobile|Mobil|Fast|Växel|Sverige).*$/i, '') // Ta bort resten
-                .trim();
-              
-              // Om det fortfarande är för långt, ta bara första 2-3 orden (namn)
-              const parts = cleanUser.split(/\s+/);
-              if (parts.length > 3) {
-                // Om det är ett långt företagsnamn, ta första 3 orden
-                cleanUser = parts.slice(0, 3).join(' ');
-              }
-              
-              if (cleanUser.length > 2 && !cleanUser.match(/^(Kontakta|Info|Är|Andra|Information|Sverige|Tele2|Telia)/i)) {
-                users.push(cleanUser);
+              // Först, försök identifiera om det är ett personnamn (börjar med stor bokstav, följs av ett ord)
+              const personNameMatch = userText.match(/^([A-ZÅÄÖ][a-zåäö]+(?:\s+[A-ZÅÄÖ][a-zåäö]+)?)/);
+              if (personNameMatch) {
+                // Det är ett personnamn, använd det
+                const personName = personNameMatch[1];
+                if (personName.length > 2 && !personName.match(/^(AB|Aktiebolag)/i)) {
+                  users.push(personName);
+                }
+              } else {
+                // Det är ett företagsnamn, ta bort "AB", "Aktiebolag", etc.
+                let cleanUser = userText
+                  .replace(/\s+(AB|Aktiebolag).*$/i, '') // Ta bort allt efter "AB" eller "Aktiebolag"
+                  .replace(/\s+(Kontakta\s+oss!|mobile|Mobil|Fast|Växel|Sverige|Tele2|Telia).*$/i, '') // Ta bort resten
+                  .trim();
+                
+                // Om det fortfarande är för långt, ta bara första 2-3 orden (namn)
+                const parts = cleanUser.split(/\s+/);
+                if (parts.length > 3) {
+                  // Om det är ett långt företagsnamn, ta första 3 orden
+                  cleanUser = parts.slice(0, 3).join(' ');
+                }
+                
+                if (cleanUser.length > 2 && !cleanUser.match(/^(Kontakta|Info|Är|Andra|Information|Sverige|Tele2|Telia)/i)) {
+                  users.push(cleanUser);
+                }
               }
             }
             
