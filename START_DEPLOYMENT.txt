@@ -1,0 +1,42 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🚀 DEPLOYMENT INSTRUKTIONER                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+STEG 1: Skapa GitHub Repository
+────────────────────────────────
+1. Öppna: https://github.com/new
+2. Repository namn: ringoptima-v3-enterprise (eller ditt eget)
+3. Välj: Public
+4. Klicka: "Create repository"
+
+STEG 2: Kör Deployment Script
+──────────────────────────────
+Kör i terminalen:
+
+    ./auto-deploy.sh
+
+Scriptet kommer fråga efter:
+  - Ditt GitHub username
+  - Repository namn
+
+Det gör automatiskt:
+  ✅ Uppdaterar alla konfigurationsfiler
+  ✅ Bygger projektet
+  ✅ Initialiserar Git
+  ✅ Pushar till GitHub
+  ✅ Deployar till GitHub Pages
+
+STEG 3: Aktivera GitHub Pages
+──────────────────────────────
+1. Gå till: https://github.com/DITT-USERNAME/DITT-REPO/settings/pages
+2. Under "Source", välj: gh-pages branch
+3. Klicka: Save
+
+STEG 4: Klart!
+──────────────
+Din app är live på:
+https://DITT-USERNAME.github.io/DITT-REPO/
+
+⏱️  Det kan ta 1-2 minuter innan sidan är tillgänglig
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,33 @@
+{
+  "name": "Ringoptima Enterprise",
+  "short_name": "Ringoptima",
+  "description": "Enterprise kontakthantering och säljoptimering för professionella team",
+  "start_url": "/ringoptima-v3-enterprise/",
+  "scope": "/ringoptima-v3-enterprise/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b1121",
+  "theme_color": "#14b89e",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/ringoptima-v3-enterprise/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/ringoptima-v3-enterprise/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/ringoptima-v3-enterprise/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "lang": "sv-SE",
+  "dir": "ltr"
+}
+

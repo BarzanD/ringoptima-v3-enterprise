@@ -1,0 +1,41 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b1121"/>
+      <stop offset="100%" style="stop-color:#172033"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#14b89e"/>
+      <stop offset="100%" style="stop-color:#0d9380"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5fe9ce"/>
+      <stop offset="50%" style="stop-color:#14b89e"/>
+      <stop offset="100%" style="stop-color:#0f766b"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  
+  <!-- Outer glow ring -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#ringGrad)" stroke-width="3" opacity="0.3"/>
+  
+  <!-- Main ring -->
+  <circle cx="256" cy="256" r="140" fill="none" stroke="url(#accentGrad)" stroke-width="24" stroke-linecap="round"/>
+  
+  <!-- Ring accent dash -->
+  <circle cx="256" cy="256" r="140" fill="none" stroke="#5fe9ce" stroke-width="24" stroke-linecap="round" stroke-dasharray="88 792" transform="rotate(-90 256 256)"/>
+  
+  <!-- Phone icon in center -->
+  <g transform="translate(200, 200)">
+    <rect x="20" y="0" width="72" height="112" rx="12" fill="url(#accentGrad)"/>
+    <rect x="30" y="8" width="52" height="80" rx="4" fill="#0b1121"/>
+    <circle cx="56" cy="100" r="6" fill="#0b1121"/>
+    <!-- Signal waves -->
+    <path d="M100 24 Q120 24 120 44" fill="none" stroke="#5fe9ce" stroke-width="4" stroke-linecap="round"/>
+    <path d="M100 12 Q132 12 132 44" fill="none" stroke="#5fe9ce" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M100 0 Q144 0 144 44" fill="none" stroke="#5fe9ce" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+  </g>
+</svg>
+
