@@ -51,9 +51,11 @@ export function parseCSV(text: string): string[][] {
   }
   
   // Push last cell and row
-  currentRow.push(currentCell.trim());
-  if (currentRow.some(cell => cell !== '')) {
-    rows.push(currentRow);
+  if (currentCell.trim() || currentRow.length > 0) {
+    currentRow.push(currentCell.trim());
+    if (currentRow.some(cell => cell !== '')) {
+      rows.push(currentRow);
+    }
   }
   
   return rows;
@@ -123,14 +125,19 @@ export function extractPhoneData(
     const lines = phoneData.split(/\n/);
     
     for (const line of lines) {
+      const trimmedLine = line.trim();
+      
+      // Hoppa över tomma rader
+      if (!trimmedLine) continue;
+      
       // Hoppa över header-rader och info-text
-      if (line.match(/^(Telefonnummer|Användare|Operatör|Senaste|Tidigare|Typ|Är|Info|Information|Andra|Föregående|Nästa|Kontakta|Lås|Köp)/i)) {
+      if (trimmedLine.match(/^(Telefonnummer|Användare|Operatör|Senaste|Tidigare|Typ|Är|Info|Information|Andra|Föregående|Nästa|Kontakta|Lås|Köp|Hittar|har|Med|tjänsten|Nummer|Plus|Lås|Swish|se|alla|nummer|direkt|Köp|för|kr|med)/i)) {
         continue;
       }
       
       // Hitta telefonnummer i början av raden (format: "0152-154 23" eller "070-123 45 67")
       // Först försök hitta telefonnummer i början av raden
-      const leadingPhoneMatch = line.match(/^[\s]*(\d{2,4}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{0,3})/);
+      const leadingPhoneMatch = trimmedLine.match(/^[\s]*(\d{2,4}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{0,3})/);
       if (leadingPhoneMatch) {
         const phoneStr = leadingPhoneMatch[1];
         const normalized = normalizePhone(phoneStr);
@@ -140,11 +147,11 @@ export function extractPhoneData(
           seenPhones.add(normalized);
           
           // Extrahera användare (text efter telefonnummer, före operatör)
-          const afterPhone = line.substring(leadingPhoneMatch[0].length);
+          const afterPhone = trimmedLine.substring(leadingPhoneMatch[0].length);
           const operatorMatch = afterPhone.match(operatorRegex);
           if (operatorMatch) {
             const userText = afterPhone.substring(0, operatorMatch.index).trim();
-            if (userText && userText.length > 2 && !userText.match(/^(Kontakta|Info|Är|Andra|Information|Mobil|Fast|Växel)/i)) {
+            if (userText && userText.length > 2 && !userText.match(/^(Kontakta|Info|Är|Andra|Information|Mobil|Fast|Växel|AB|Aktiebolag)/i)) {
               users.push(userText);
             }
             
@@ -157,9 +164,9 @@ export function extractPhoneData(
         }
       }
       
-      // Sök även efter telefonnummer med andra mönster i hela raden
+      // Sök även efter telefonnummer med andra mönster i hela raden (för att hitta fler telefonnummer)
       for (const pattern of phonePatterns) {
-        const matches = line.matchAll(pattern);
+        const matches = trimmedLine.matchAll(pattern);
         for (const match of matches) {
           // Hoppa över om vi redan hittade detta nummer i början av raden
           if (leadingPhoneMatch && match.index === leadingPhoneMatch.index) {
@@ -266,21 +273,30 @@ export function transformCSV(rows: string[][], batchId: number): NewContact[] {
   
   // Transformera rader
   let skippedCount = 0;
+  let skippedReasons: Record<string, number> = {
+    noName: 0,
+    noPhone: 0,
+    invalidFormat: 0,
+  };
+  
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
     
-    // Kontrollera att raden har rätt antal kolumner (minst 7 för att vara en giltig rad)
+    // Kontrollera att raden har rätt antal kolumner (minst 3 för att vara en giltig rad)
     if (row.length < 3) {
       skippedCount++;
+      skippedReasons.invalidFormat++;
       continue;
     }
     
     const name = row[colName]?.trim() || '';
     if (!name) {
       skippedCount++;
+      skippedReasons.noName++;
       continue;
     }
     
+    // Extrahera telefonnummer från alla relevanta kolumner
     const phoneExtract = extractPhoneData(
       colPhone !== -1 ? row[colPhone] || '' : '',
       colPhoneData !== -1 ? row[colPhoneData] || '' : '',
@@ -290,6 +306,15 @@ export function transformCSV(rows: string[][], batchId: number): NewContact[] {
     // Skippa om inga telefonnummer
     if (!phoneExtract.phones || phoneExtract.phones.trim() === '') {
       skippedCount++;
+      skippedReasons.noPhone++;
+      continue;
+    }
+    
+    // Säkerställ att vi har minst ett telefonnummer
+    const phoneList = phoneExtract.phones.split('\n').filter(p => p.trim());
+    if (phoneList.length === 0) {
+      skippedCount++;
+      skippedReasons.noPhone++;
       continue;
     }
     
@@ -308,6 +333,11 @@ export function transformCSV(rows: string[][], batchId: number): NewContact[] {
       priority: 'medium',
       status: 'new',
     });
+  }
+  
+  // Logga statistik
+  if (skippedCount > 0) {
+    console.log(`CSV Import: ${contacts.length} kontakter importerade, ${skippedCount} rader hoppades över`, skippedReasons);
   }
   
   // Logga statistik om önskat
