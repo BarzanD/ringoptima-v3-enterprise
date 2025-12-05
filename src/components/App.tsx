@@ -16,6 +16,9 @@ import {
   X,
   Command as CommandIcon,
   Menu,
+  Circle,
+  Flag,
+  Radio,
 } from 'lucide-react';
 
 // Lib imports
@@ -583,41 +586,50 @@ export default function App() {
 
             {/* Filters */}
             <div className="flex items-center gap-2">
-              <select
-                value={filter.status}
-                onChange={(e) => setFilter({ status: e.target.value as any })}
-                className="select-field py-2.5 w-auto min-w-[140px]"
-              >
-                {STATUS_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    Status: {opt.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative flex items-center">
+                <Circle className="absolute left-3 w-4 h-4 text-[#2596be] pointer-events-none z-10" />
+                <select
+                  value={filter.status}
+                  onChange={(e) => setFilter({ status: e.target.value as any })}
+                  className="select-field py-2.5 pl-10 pr-4 w-auto min-w-[140px]"
+                >
+                  {STATUS_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-              <select
-                value={filter.priority}
-                onChange={(e) => setFilter({ priority: e.target.value as any })}
-                className="select-field py-2.5 w-auto min-w-[140px]"
-              >
-                {PRIORITY_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    Prioritet: {opt.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative flex items-center">
+                <Flag className="absolute left-3 w-4 h-4 text-[#2596be] pointer-events-none z-10" />
+                <select
+                  value={filter.priority}
+                  onChange={(e) => setFilter({ priority: e.target.value as any })}
+                  className="select-field py-2.5 pl-10 pr-4 w-auto min-w-[140px]"
+                >
+                  {PRIORITY_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-              <select
-                value={filter.operator}
-                onChange={(e) => setFilter({ operator: e.target.value as any })}
-                className="select-field py-2.5 w-auto min-w-[140px]"
-              >
-                {OPERATOR_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    Operatör: {opt.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative flex items-center">
+                <Radio className="absolute left-3 w-4 h-4 text-[#2596be] pointer-events-none z-10" />
+                <select
+                  value={filter.operator}
+                  onChange={(e) => setFilter({ operator: e.target.value as any })}
+                  className="select-field py-2.5 pl-10 pr-4 w-auto min-w-[140px]"
+                >
+                  {OPERATOR_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               {hasActiveFilters && (
                 <button

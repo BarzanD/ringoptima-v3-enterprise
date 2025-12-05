@@ -663,6 +663,11 @@ a:hover {
   font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
 }
 
+/* Select field with icon (left padding for icon) */
+.select-field.pl-10 {
+  padding-left: 2.5rem;
+}
+
 .select-field:hover {
   border-color: rgba(37, 150, 190, 0.3);
   background: rgba(255, 255, 255, 0.8);
