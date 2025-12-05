@@ -90,7 +90,7 @@ export function extractPhoneData(
     /(\d{7,})/g, // 701234567 (minst 7 siffror)
   ];
   
-  const operatorRegex = /(Telia|Tele2|Tre|HI3G|Telenor|Comviq|TeliaSonera|Telness|Advoco|HI3G Access)/gi;
+  const operatorRegex = /(Telia|Tele2|Tre|HI3G|Telenor|Comviq|TeliaSonera|Telness|Advoco|HI3G Access|Telavox|InfraCom|Weblink)/gi;
   
   // Enkel telefon från Telefonnummer-kolumnen
   if (simplePhone && simplePhone.trim()) {
@@ -151,34 +151,77 @@ export function extractPhoneData(
           const operatorMatch = afterPhone.match(operatorRegex);
           if (operatorMatch) {
             const userText = afterPhone.substring(0, operatorMatch.index).trim();
-            if (userText && userText.length > 2 && !userText.match(/^(Kontakta|Info|Är|Andra|Information|Mobil|Fast|Växel|AB|Aktiebolag)/i)) {
-              users.push(userText);
+            
+            // Rensa bort onödig text och ta bara första namnet/företagsnamnet
+            if (userText && userText.length > 2) {
+              // Ta bort allt efter första företagsnamnet/personnamnet
+              // Format: "Kanyakorn Thai Massage AB Tele2 Sverige AB Kontakta oss! Kontakta oss! Mobil"
+              // Vi vill bara ha: "Kanyakorn Thai Massage"
+              
+              // Ta bort "AB", "Aktiebolag", "Kontakta oss!", "Sverige AB", "Mobil", "Fast", etc.
+              let cleanUser = userText
+                .replace(/\s+(AB|Aktiebolag).*$/i, '') // Ta bort allt efter "AB" eller "Aktiebolag"
+                .replace(/\s+(Kontakta\s+oss!|mobile|Mobil|Fast|Växel|Sverige).*$/i, '') // Ta bort resten
+                .trim();
+              
+              // Om det fortfarande är för långt, ta bara första 2-3 orden (namn)
+              const parts = cleanUser.split(/\s+/);
+              if (parts.length > 3) {
+                // Om det är ett långt företagsnamn, ta första 3 orden
+                cleanUser = parts.slice(0, 3).join(' ');
+              }
+              
+              if (cleanUser.length > 2 && !cleanUser.match(/^(Kontakta|Info|Är|Andra|Information|Sverige|Tele2|Telia)/i)) {
+                users.push(cleanUser);
+              }
             }
             
-            // Extrahera operatör
+            // Extrahera operatör - ta bara operatörsnamnet, inte "Sverige AB" etc.
             const operatorName = operatorMatch[0];
-            if (!operators.includes(operatorName)) {
-              operators.push(operatorName);
+            // Rensa bort "Sverige AB", "(mobile)", etc.
+            const cleanOperator = operatorName.replace(/\s+(Sverige|AB|\(mobile\)|\(fix\)).*$/i, '').trim();
+            if (cleanOperator && !operators.includes(cleanOperator)) {
+              operators.push(cleanOperator);
+            }
+          } else {
+            // Om ingen operatör hittades, försök hitta den i hela raden
+            const operatorMatchGlobal = trimmedLine.match(operatorRegex);
+            if (operatorMatchGlobal) {
+              const operatorName = operatorMatchGlobal[0];
+              const cleanOperator = operatorName.replace(/\s+(Sverige|AB|\(mobile\)|\(fix\)).*$/i, '').trim();
+              if (cleanOperator && !operators.includes(cleanOperator)) {
+                operators.push(cleanOperator);
+              }
             }
           }
         }
       }
       
       // Sök även efter telefonnummer med andra mönster i hela raden (för att hitta fler telefonnummer)
-      for (const pattern of phonePatterns) {
-        const matches = trimmedLine.matchAll(pattern);
-        for (const match of matches) {
-          // Hoppa över om vi redan hittade detta nummer i början av raden
-          if (leadingPhoneMatch && match.index === leadingPhoneMatch.index) {
-            continue;
-          }
-          
-          const phoneStr = match[1];
-          const normalized = normalizePhone(phoneStr);
-          
-          if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
-            phones.push(normalized);
-            seenPhones.add(normalized);
+      // Men hoppa över om vi redan hittade ett telefonnummer i början (för att undvika dubbletter)
+      if (!leadingPhoneMatch) {
+        for (const pattern of phonePatterns) {
+          const matches = trimmedLine.matchAll(pattern);
+          for (const match of matches) {
+            const phoneStr = match[1];
+            const normalized = normalizePhone(phoneStr);
+            
+            if (isValidPhone(normalized) && !seenPhones.has(normalized)) {
+              phones.push(normalized);
+              seenPhones.add(normalized);
+              
+              // Försök också hitta operatör om vi inte redan har en
+              if (operators.length === 0) {
+                const operatorMatch = trimmedLine.match(operatorRegex);
+                if (operatorMatch) {
+                  const operatorName = operatorMatch[0];
+                  const cleanOperator = operatorName.replace(/\s+(Sverige|AB|\(mobile\)|\(fix\)).*$/i, '').trim();
+                  if (cleanOperator && !operators.includes(cleanOperator)) {
+                    operators.push(cleanOperator);
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -212,8 +255,12 @@ export function extractPhoneData(
             
             // Operatör från rad
             const opMatch = line.match(operatorRegex);
-            if (opMatch && !operators.includes(opMatch[0])) {
-              operators.push(opMatch[0]);
+            if (opMatch) {
+              const operatorName = opMatch[0];
+              const cleanOperator = operatorName.replace(/\s+(Sverige|AB|\(mobile\)|\(fix\)).*$/i, '').trim();
+              if (cleanOperator && !operators.includes(cleanOperator)) {
+                operators.push(cleanOperator);
+              }
             }
           }
         }

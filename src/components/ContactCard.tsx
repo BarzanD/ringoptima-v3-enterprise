@@ -127,7 +127,7 @@ const ContactCard = memo(function ContactCard({
             <>
               <div className="contact-primary-info">
                 <User className="contact-icon" />
-                {users[0]}
+                {users[0].split('\n')[0].trim()}
               </div>
               {users.length > 1 && (
                 <div className="contact-secondary-info">
@@ -144,7 +144,7 @@ const ContactCard = memo(function ContactCard({
         <div className="contact-card-column">
           {operators.length > 0 ? (
             <>
-              <div className="contact-primary-info">{operators[0]}</div>
+              <div className="contact-primary-info">{operators[0].split('\n')[0].trim()}</div>
               {operators.length > 1 && (
                 <div className="contact-secondary-info">
                   +{operators.length - 1} till
