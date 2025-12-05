@@ -17,7 +17,7 @@ export const Skeleton = memo(function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'shimmer rounded-lg bg-slate-800/50',
+        'shimmer rounded-lg bg-[rgba(37,150,190,0.1)]',
         className
       )}
       aria-hidden="true"
@@ -31,14 +31,16 @@ export const Skeleton = memo(function Skeleton({ className }: SkeletonProps) {
 
 export const TableRowSkeleton = memo(function TableRowSkeleton() {
   return (
-    <div className="flex items-center gap-4 px-4 py-4 border-b border-slate-800/50">
-      <Skeleton className="w-10 h-10 rounded-lg" />
-      <div className="flex-1 space-y-2">
+    <div className="contact-card">
+      <div className="contact-card-grid">
         <Skeleton className="h-4 w-48" />
-        <Skeleton className="h-3 w-32" />
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-10 w-24" />
       </div>
-      <Skeleton className="h-6 w-20 rounded-full" />
-      <Skeleton className="h-8 w-24" />
     </div>
   );
 });
@@ -49,16 +51,16 @@ export const TableRowSkeleton = memo(function TableRowSkeleton() {
 
 export const ContactCardSkeleton = memo(function ContactCardSkeleton() {
   return (
-    <div className="flex items-start gap-4 p-4 border-b border-slate-800/50">
-      <Skeleton className="w-12 h-12 rounded-xl" />
-      <div className="flex-1 space-y-2">
-        <Skeleton className="h-4 w-40" />
-        <div className="flex gap-3">
-          <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-3 w-16" />
-        </div>
+    <div className="contact-card">
+      <div className="contact-card-grid">
+        <Skeleton className="h-4 w-48" />
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+        <Skeleton className="h-10 w-24" />
       </div>
-      <Skeleton className="w-10 h-10 rounded-full" />
     </div>
   );
 });
@@ -89,9 +91,9 @@ export const ChartSkeleton = memo(function ChartSkeleton() {
     <div className="glass-card p-6">
       <Skeleton className="h-5 w-40 mb-6" />
       <div className="flex items-end justify-between gap-2 h-48">
-        {[40, 65, 45, 80, 55, 70, 50].map((height, i) => (
+        {[40, 65, 45, 80, 55, 70, 50].map((height) => (
           <div
-            key={i}
+            key={height}
             className="w-full rounded-t"
             style={{ height: `${height}%` }}
           >
@@ -109,13 +111,13 @@ export const ChartSkeleton = memo(function ChartSkeleton() {
 
 export const PageLoading = memo(function PageLoading() {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm z-50">
       <div className="flex flex-col items-center gap-4">
         <div className="relative">
-          <div className="w-16 h-16 rounded-full border-4 border-brand-500/20 animate-pulse" />
-          <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-brand-500 animate-spin" />
+          <div className="w-16 h-16 rounded-full border-4 border-[rgba(37,150,190,0.2)] animate-pulse" />
+          <div className="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-[#2596be] animate-spin" />
         </div>
-        <p className="text-slate-400 text-sm font-medium">Laddar Ringoptima...</p>
+        <p className="text-[rgba(60,60,67,0.6)] text-sm font-medium">Laddar Ringoptima...</p>
       </div>
     </div>
   );
@@ -140,7 +142,7 @@ export const Spinner = memo(function Spinner({ size = 'md', className }: Spinner
   return (
     <div
       className={cn(
-        'rounded-full border-brand-500/20 border-t-brand-500 animate-spin',
+        'rounded-full border-[rgba(37,150,190,0.2)] border-t-[#2596be] animate-spin',
         sizeClasses[size],
         className
       )}
@@ -162,7 +164,7 @@ export const LoadingDots = memo(function LoadingDots() {
       {[0, 1, 2].map((i) => (
         <div
           key={i}
-          className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"
+          className="w-2 h-2 rounded-full bg-[#2596be] animate-pulse"
           style={{ animationDelay: `${i * 150}ms` }}
         />
       ))}
@@ -190,11 +192,11 @@ export const EmptyState = memo(function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-      <div className="w-20 h-20 flex items-center justify-center rounded-2xl bg-slate-800/50 mb-6 text-slate-500">
+      <div className="w-20 h-20 flex items-center justify-center rounded-2xl bg-[rgba(37,150,190,0.1)] mb-6 text-[#2596be]">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold text-slate-200 mb-2">{title}</h3>
-      <p className="text-sm text-slate-400 max-w-sm mb-6">{description}</p>
+      <h3 className="text-lg font-semibold text-[#000000] mb-2">{title}</h3>
+      <p className="text-sm text-[rgba(60,60,67,0.6)] max-w-sm mb-6">{description}</p>
       {action}
     </div>
   );

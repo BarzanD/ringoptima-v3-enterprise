@@ -158,7 +158,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
         exit={{ opacity: 0 }}
         className={cn(
           'fixed inset-0 z-50',
-          isMobile ? 'mobile-modal-overlay' : 'bg-black/60 backdrop-blur-sm'
+          isMobile ? 'mobile-modal-overlay' : 'bg-black/40 backdrop-blur-sm'
         )}
         onClick={onClose}
         aria-hidden="true"
@@ -171,7 +171,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
         className={cn(
           isMobile
             ? 'mobile-modal-sheet'
-            : 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl glass-card'
+            : 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl glass-card bg-white'
         )}
         role="dialog"
         aria-modal="true"
@@ -181,25 +181,25 @@ const ContactDetailModal = memo(function ContactDetailModal({
         {/* Mobile handle */}
         {isMobile && (
           <div className="mobile-modal-handle">
-            <div className="mobile-modal-handle-bar" />
+            <div className="mobile-modal-handle-bar bg-[rgba(37,150,190,0.2)]" />
           </div>
         )}
 
         {/* Header */}
         <div className={cn(
-          'flex items-center gap-4 p-6 border-b border-slate-800/50',
+          'flex items-center gap-4 p-6 border-b border-[rgba(37,150,190,0.2)]',
           isMobile && 'p-4'
         )}>
           {/* Avatar */}
-          <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white font-bold text-xl shadow-lg shadow-brand-500/30">
+          <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-2xl bg-gradient-to-br from-[#2596be] to-[#1e7a9c] text-white font-bold text-xl shadow-lg shadow-[rgba(37,150,190,0.3)]">
             {initials}
           </div>
           
           <div className="flex-1 min-w-0">
-            <h2 id="modal-title" className="text-xl font-bold text-slate-100 truncate">
+            <h2 id="modal-title" className="text-xl font-bold text-[#000000] truncate">
               {contact.name}
             </h2>
-            <p className="text-sm text-slate-400">{contact.org || 'Inget orgnr'}</p>
+            <p className="text-sm text-[rgba(60,60,67,0.6)]">{contact.org || 'Inget orgnr'}</p>
           </div>
 
           <button
@@ -207,22 +207,22 @@ const ContactDetailModal = memo(function ContactDetailModal({
             className="btn-icon"
             aria-label="Stäng"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-[rgba(60,60,67,0.6)]" />
           </button>
         </div>
 
         {/* Content */}
-        <div className={cn(
-          'overflow-y-auto p-6 space-y-6',
-          isMobile && 'mobile-modal-body'
-        )}>
+          <div className={cn(
+            'overflow-y-auto p-6 space-y-6 bg-white',
+            isMobile && 'mobile-modal-body'
+          )}>
           {/* Quick Actions */}
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setIsEditing(!isEditing)}
               className={cn(
                 'btn-secondary flex items-center gap-2',
-                isEditing && 'bg-brand-500/20 border-brand-500/50 text-brand-400'
+                isEditing && 'bg-[rgba(37,150,190,0.1)] border-[rgba(37,150,190,0.3)] text-[#2596be]'
               )}
             >
               <Edit3 className="w-4 h-4" />
@@ -240,7 +240,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
             )}
             <button
               onClick={handleDelete}
-              className="btn-ghost text-red-400 hover:text-red-300 hover:bg-red-500/10"
+              className="btn-ghost text-[#ef4444] hover:text-[#dc2626] hover:bg-[rgba(239,68,68,0.1)]"
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -249,7 +249,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
           {/* Status & Priority */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-400 mb-2">
+              <label className="block text-sm font-medium text-[rgba(60,60,67,0.6)] mb-2">
                 Status
               </label>
               {isEditing ? (
@@ -267,12 +267,12 @@ const ContactDetailModal = memo(function ContactDetailModal({
               ) : (
                 <div className="flex items-center gap-2">
                   <span className={cn('status-dot', `status-${contact.status.replace('_', '-')}`)} />
-                  <span className="text-slate-200">{getStatusLabel(contact.status)}</span>
+                  <span className="text-[#000000]">{getStatusLabel(contact.status)}</span>
                 </div>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-400 mb-2">
+              <label className="block text-sm font-medium text-[rgba(60,60,67,0.6)] mb-2">
                 Prioritet
               </label>
               {isEditing ? (
@@ -288,7 +288,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
                   ))}
                 </select>
               ) : (
-                <span className="text-slate-200">{getPriorityLabel(contact.priority)}</span>
+                <span className="text-[#000000]">{getPriorityLabel(contact.priority)}</span>
               )}
             </div>
           </div>
@@ -297,11 +297,11 @@ const ContactDetailModal = memo(function ContactDetailModal({
           <div className="grid gap-4">
             {/* Location */}
             {(contact.address || contact.city) && (
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/30">
-                <MapPin className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] border border-[rgba(37,150,190,0.2)]">
+                <MapPin className="w-5 h-5 text-[#2596be] flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-slate-400">Adress</p>
-                  <p className="text-slate-200">
+                  <p className="text-sm text-[rgba(60,60,67,0.6)]">Adress</p>
+                  <p className="text-[#000000]">
                     {contact.address}
                     {contact.address && contact.city && ', '}
                     {contact.city}
@@ -311,10 +311,10 @@ const ContactDetailModal = memo(function ContactDetailModal({
             )}
 
             {/* Contact Person */}
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/30">
-              <User className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] border border-[rgba(37,150,190,0.2)]">
+              <User className="w-5 h-5 text-[#2596be] flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-slate-400">Kontaktperson</p>
+                <p className="text-sm text-[rgba(60,60,67,0.6)]">Kontaktperson</p>
                 {isEditing ? (
                   <input
                     type="text"
@@ -324,16 +324,16 @@ const ContactDetailModal = memo(function ContactDetailModal({
                     placeholder="Namn på kontaktperson"
                   />
                 ) : (
-                  <p className="text-slate-200">{contact.contact || '—'}</p>
+                  <p className="text-[#000000]">{contact.contact || '—'}</p>
                 )}
               </div>
             </div>
 
             {/* Role */}
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/30">
-              <Briefcase className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] border border-[rgba(37,150,190,0.2)]">
+              <Briefcase className="w-5 h-5 text-[#2596be] flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-slate-400">Roll</p>
+                <p className="text-sm text-[rgba(60,60,67,0.6)]">Roll</p>
                 {isEditing ? (
                   <input
                     type="text"
@@ -343,33 +343,33 @@ const ContactDetailModal = memo(function ContactDetailModal({
                     placeholder="VD, Säljchef, etc."
                   />
                 ) : (
-                  <p className="text-slate-200">{contact.role || '—'}</p>
+                  <p className="text-[#000000]">{contact.role || '—'}</p>
                 )}
               </div>
             </div>
 
             {/* Phone Numbers */}
             {contact.phones && (
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/30">
-                <Phone className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] border border-[rgba(37,150,190,0.2)]">
+                <Phone className="w-5 h-5 text-[#2596be] flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-sm text-slate-400 mb-2">
+                  <p className="text-sm text-[rgba(60,60,67,0.6)] mb-2">
                     Telefonnummer ({countPhones(contact.phones)})
                   </p>
                   <div className="space-y-2">
                     {contact.phones.split('\n').filter(Boolean).map((phone, i) => (
                       <div key={i} className="flex items-center gap-2">
-                        <span className="text-slate-200 font-mono text-sm">{phone}</span>
+                        <span className="text-[#000000] font-mono text-sm">{phone}</span>
                         <button
                           onClick={() => handleCopyPhone(phone)}
-                          className="p-1 rounded hover:bg-slate-700/50 text-slate-400 hover:text-slate-200"
+                          className="p-1 rounded hover:bg-[rgba(37,150,190,0.1)] text-[rgba(60,60,67,0.6)] hover:text-[#2596be]"
                           aria-label="Kopiera"
                         >
                           <Copy className="w-3.5 h-3.5" />
                         </button>
                         <a
                           href={`tel:${phone.replace(/\D/g, '')}`}
-                          className="p-1 rounded hover:bg-brand-500/20 text-brand-400"
+                          className="p-1 rounded hover:bg-[rgba(37,150,190,0.1)] text-[#2596be]"
                           aria-label="Ring"
                         >
                           <Phone className="w-3.5 h-3.5" />
@@ -384,7 +384,7 @@ const ContactDetailModal = memo(function ContactDetailModal({
 
           {/* Notes */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-400 mb-2">
+            <label className="flex items-center gap-2 text-sm font-medium text-[rgba(60,60,67,0.6)] mb-2">
               <MessageSquare className="w-4 h-4" />
               Anteckningar
             </label>
@@ -396,18 +396,18 @@ const ContactDetailModal = memo(function ContactDetailModal({
                 placeholder="Lägg till anteckningar om samtalet..."
               />
             ) : (
-              <div className="p-4 rounded-xl bg-slate-800/30 min-h-[80px]">
+              <div className="p-4 rounded-xl bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] border border-[rgba(37,150,190,0.2)] min-h-[80px]">
                 {contact.notes ? (
-                  <p className="text-slate-200 whitespace-pre-wrap">{contact.notes}</p>
+                  <p className="text-[#000000] whitespace-pre-wrap">{contact.notes}</p>
                 ) : (
-                  <p className="text-slate-500 italic">Inga anteckningar</p>
+                  <p className="text-[rgba(60,60,67,0.4)] italic">Inga anteckningar</p>
                 )}
               </div>
             )}
           </div>
 
           {/* Metadata */}
-          <div className="flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-800/50">
+          <div className="flex items-center justify-between text-xs text-[rgba(60,60,67,0.6)] pt-4 border-t border-[rgba(37,150,190,0.2)]">
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
               Skapad: {formatDateTime(contact.createdAt)}

@@ -12,19 +12,19 @@ import type { ToastType } from '../types';
 const toastConfig: Record<ToastType, { icon: typeof CheckCircle; className: string }> = {
   success: {
     icon: CheckCircle,
-    className: 'bg-brand-500/20 border-brand-500/30 text-brand-400',
+    className: 'bg-[rgba(37,150,190,0.1)] border-[rgba(37,150,190,0.3)] text-[#2596be] backdrop-blur-lg',
   },
   error: {
     icon: XCircle,
-    className: 'bg-red-500/20 border-red-500/30 text-red-400',
+    className: 'bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.3)] text-[#ef4444] backdrop-blur-lg',
   },
   info: {
     icon: Info,
-    className: 'bg-sky-500/20 border-sky-500/30 text-sky-400',
+    className: 'bg-[rgba(14,165,233,0.1)] border-[rgba(14,165,233,0.3)] text-[#0ea5e9] backdrop-blur-lg',
   },
   warning: {
     icon: AlertTriangle,
-    className: 'bg-amber-500/20 border-amber-500/30 text-amber-400',
+    className: 'bg-[rgba(251,191,36,0.1)] border-[rgba(251,191,36,0.3)] text-[#fbbf24] backdrop-blur-lg',
   },
 };
 
@@ -49,21 +49,21 @@ const ToastItem = memo(function ToastItem({
       exit={{ opacity: 0, y: 20, scale: 0.9 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       className={cn(
-        'flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-lg',
-        'shadow-lg max-w-sm',
+        'flex items-center gap-3 px-4 py-3 rounded-xl border',
+        'shadow-lg max-w-sm bg-white/90',
         config.className
       )}
       role="alert"
       aria-live="polite"
     >
       <Icon className="w-5 h-5 flex-shrink-0" />
-      <p className="flex-1 text-sm font-medium text-slate-100">{message}</p>
+      <p className="flex-1 text-sm font-medium text-[#000000]">{message}</p>
       <button
         onClick={() => removeToast(id)}
-        className="p-1 rounded-lg hover:bg-white/10 transition-colors"
+        className="p-1 rounded-lg hover:bg-[rgba(37,150,190,0.1)] transition-colors"
         aria-label="Stäng notifikation"
       >
-        <X className="w-4 h-4 text-slate-400" />
+        <X className="w-4 h-4 text-[rgba(60,60,67,0.6)]" />
       </button>
     </motion.div>
   );

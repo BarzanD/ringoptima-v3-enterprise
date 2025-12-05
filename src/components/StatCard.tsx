@@ -20,9 +20,9 @@ interface StatCardProps {
 
 const colorConfig = {
   brand: {
-    iconBg: 'bg-brand-500/15',
-    iconColor: 'text-brand-400',
-    glow: 'shadow-brand-500/10',
+    iconBg: 'bg-[rgba(37,150,190,0.15)]',
+    iconColor: 'text-[#2596be]',
+    glow: 'shadow-[rgba(37,150,190,0.1)]',
   },
   sky: {
     iconBg: 'bg-sky-500/15',
@@ -65,9 +65,9 @@ const StatCard = memo(function StatCard({
       : TrendingDown;
   
   const trendColor = trend === undefined || trend === 0
-    ? 'text-slate-400'
+    ? 'text-[rgba(60,60,67,0.6)]'
     : trend > 0
-      ? 'text-brand-400'
+      ? 'text-[#2596be]'
       : 'text-red-400';
 
   return (
@@ -84,7 +84,7 @@ const StatCard = memo(function StatCard({
       {/* Background decoration */}
       <div 
         className={cn(
-          'absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-5',
+          'absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-[0.05]',
           config.iconBg
         )} 
       />
@@ -92,7 +92,7 @@ const StatCard = memo(function StatCard({
       <div className="relative">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <span className="text-sm font-medium text-slate-400">{title}</span>
+          <span className="text-sm font-medium text-[rgba(60,60,67,0.6)]">{title}</span>
           <div className={cn('p-2 rounded-xl', config.iconBg, config.iconColor)}>
             {icon}
           </div>
@@ -100,11 +100,11 @@ const StatCard = memo(function StatCard({
         
         {/* Value */}
         <div className="mb-2">
-          <span className="text-3xl font-bold text-slate-100 tabular-nums">
+          <span className="text-3xl font-bold text-[#000000] tabular-nums">
             {formatNumber(value)}
           </span>
           {suffix && (
-            <span className="text-lg text-slate-400 ml-1">{suffix}</span>
+            <span className="text-lg text-[rgba(60,60,67,0.6)] ml-1">{suffix}</span>
           )}
         </div>
         
@@ -120,7 +120,7 @@ const StatCard = memo(function StatCard({
               </div>
             )}
             {trendLabel && (
-              <span className="text-xs text-slate-500">{trendLabel}</span>
+              <span className="text-xs text-[rgba(60,60,67,0.6)]">{trendLabel}</span>
             )}
           </div>
         )}
@@ -138,21 +138,21 @@ export default StatCard;
 interface MiniStatCardProps {
   label: string;
   value: number;
-  color?: string;
+  color?: string; // Hex color
 }
 
 export const MiniStatCard = memo(function MiniStatCard({
   label,
   value,
-  color = 'bg-slate-500',
+  color = '#6b7280',
 }: MiniStatCardProps) {
   return (
-    <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-slate-800/30 hover:bg-slate-800/50 transition-colors">
+    <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] hover:bg-[rgba(255,255,255,0.8)] transition-colors border border-[rgba(37,150,190,0.1)]">
       <div className="flex items-center gap-2">
-        <div className={cn('w-2 h-2 rounded-full', color)} />
-        <span className="text-sm text-slate-400">{label}</span>
+        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+        <span className="text-sm text-[rgba(60,60,67,0.6)]">{label}</span>
       </div>
-      <span className="text-sm font-semibold text-slate-200 tabular-nums">
+      <span className="text-sm font-semibold text-[#000000] tabular-nums">
         {formatNumber(value)}
       </span>
     </div>

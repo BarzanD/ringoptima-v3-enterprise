@@ -4,19 +4,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Unik enterprise-färgpalett inspirerad av skandinavisk design
+        // Primary color: #2596be
         brand: {
-          50: '#f0fdf9',
-          100: '#ccfbef',
-          200: '#99f6e0',
-          300: '#5fe9ce',
-          400: '#2dd4b7',
-          500: '#14b89e',
-          600: '#0d9380',
-          700: '#0f766b',
-          800: '#115e57',
-          900: '#134e48',
-          950: '#042f2e',
+          50: '#e6f4f8',
+          100: '#cce9f1',
+          200: '#99d3e3',
+          300: '#66bdd5',
+          400: '#33a7c7',
+          500: '#2596be',
+          600: '#1e7a9c',
+          700: '#175e7a',
+          800: '#104258',
+          900: '#0a2636',
+        },
+        primary: {
+          DEFAULT: '#2596be',
+          light: '#3ba8d0',
+          dark: '#1e7a9c',
+        },
+        secondary: {
+          DEFAULT: '#765db6',
         },
         slate: {
           850: '#172033',

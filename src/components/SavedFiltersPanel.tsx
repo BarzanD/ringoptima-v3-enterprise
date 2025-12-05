@@ -88,19 +88,19 @@ const SavedFiltersPanel = memo(function SavedFiltersPanel({
         aria-expanded={isExpanded}
       >
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-violet-500/15 text-violet-400">
+          <div className="p-2 rounded-lg bg-[rgba(118,93,182,0.15)] text-[#765db6]">
             <Bookmark className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <h3 className="font-semibold text-slate-200">Sparade filter</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="font-semibold text-[#000000]">Sparade filter</h3>
+            <p className="text-xs text-[rgba(60,60,67,0.6)]">
               {savedFilters.length} {savedFilters.length === 1 ? 'filter' : 'filter'}
             </p>
           </div>
         </div>
         <ChevronDown
           className={cn(
-            'w-5 h-5 text-slate-400 transition-transform',
+            'w-5 h-5 text-[rgba(60,60,67,0.6)] transition-transform',
             isExpanded && 'rotate-180'
           )}
         />
@@ -121,7 +121,7 @@ const SavedFiltersPanel = memo(function SavedFiltersPanel({
               {hasActiveFilter && !isCreating && (
                 <button
                   onClick={() => setIsCreating(true)}
-                  className="w-full flex items-center justify-center gap-2 p-3 rounded-xl border border-dashed border-slate-700 text-slate-400 hover:border-brand-500/50 hover:text-brand-400 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 p-3 rounded-xl border border-dashed border-[rgba(37,150,190,0.3)] text-[rgba(60,60,67,0.6)] hover:border-[#2596be] hover:text-[#2596be] transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   Spara nuvarande filter
@@ -135,7 +135,7 @@ const SavedFiltersPanel = memo(function SavedFiltersPanel({
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="p-3 rounded-xl bg-slate-800/50 space-y-3"
+                    className="p-3 rounded-xl bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] border border-[rgba(37,150,190,0.2)] space-y-3"
                   >
                     <input
                       type="text"
@@ -173,7 +173,7 @@ const SavedFiltersPanel = memo(function SavedFiltersPanel({
 
               {/* Saved filters list */}
               {savedFilters.length === 0 ? (
-                <p className="text-center text-sm text-slate-500 py-4">
+                <p className="text-center text-sm text-[rgba(60,60,67,0.6)] py-4">
                   Inga sparade filter ännu
                 </p>
               ) : (
@@ -182,25 +182,25 @@ const SavedFiltersPanel = memo(function SavedFiltersPanel({
                     <motion.div
                       key={saved.id}
                       layout
-                      className="group flex items-center justify-between p-3 rounded-xl bg-slate-800/30 hover:bg-slate-800/50 transition-colors"
+                      className="group flex items-center justify-between p-3 rounded-xl bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] hover:bg-[rgba(255,255,255,0.8)] transition-colors border border-[rgba(37,150,190,0.1)]"
                     >
                       <button
                         onClick={() => onLoadFilter(saved.filter)}
                         className="flex-1 text-left"
                       >
                         <div className="flex items-center gap-2">
-                          <Filter className="w-3.5 h-3.5 text-slate-500" />
-                          <span className="font-medium text-slate-200 text-sm">
+                          <Filter className="w-3.5 h-3.5 text-[rgba(60,60,67,0.6)]" />
+                          <span className="font-medium text-[#000000] text-sm">
                             {saved.name}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-xs text-[rgba(60,60,67,0.6)] mt-1">
                           {formatDate(saved.createdAt)}
                         </p>
                       </button>
                       <button
                         onClick={() => saved.id && handleDeleteFilter(saved.id)}
-                        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition-all"
+                        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-[rgba(239,68,68,0.1)] text-[rgba(60,60,67,0.6)] hover:text-[#ef4444] transition-all"
                         aria-label="Radera filter"
                       >
                         <Trash2 className="w-3.5 h-3.5" />

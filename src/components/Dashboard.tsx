@@ -48,15 +48,15 @@ const CustomTooltip = memo(function CustomTooltip({ active, payload, label }: Cu
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="bg-slate-800/95 backdrop-blur-lg border border-slate-700/50 rounded-xl p-3 shadow-xl">
-      {label && <p className="text-xs text-slate-400 mb-2">{label}</p>}
+    <div className="bg-white/95 backdrop-blur-lg border border-[rgba(37,150,190,0.2)] rounded-xl p-3 shadow-xl">
+      {label && <p className="text-xs text-[rgba(60,60,67,0.6)] mb-2">{label}</p>}
       {payload.map((entry, index) => (
         <div key={index} className="flex items-center gap-2">
           <div
             className="w-2 h-2 rounded-full"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="text-sm text-slate-200">
+          <span className="text-sm text-[#000000]">
             {entry.name}: <span className="font-semibold">{formatNumber(entry.value)}</span>
           </span>
         </div>
@@ -121,12 +121,12 @@ const Dashboard = memo(function Dashboard() {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6 max-w-[1440px] mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-100">Dashboard</h2>
-          <p className="text-slate-400">Översikt och statistik</p>
+          <h2 className="text-2xl font-bold text-[#2596be]">Dashboard</h2>
+          <p className="text-[rgba(60,60,67,0.6)]">Översikt och statistik</p>
         </div>
       </div>
 
@@ -177,8 +177,8 @@ const Dashboard = memo(function Dashboard() {
           transition={{ duration: 0.4, delay: 0.2 }}
           className="glass-card p-6"
         >
-          <h3 className="text-lg font-semibold text-slate-100 mb-6 flex items-center gap-2">
-            <Activity className="w-5 h-5 text-brand-400" />
+          <h3 className="text-lg font-semibold text-[#2596be] mb-6 flex items-center gap-2">
+            <Activity className="w-5 h-5 text-[#2596be]" />
             Aktivitet denna vecka
           </h3>
           <ResponsiveContainer width="100%" height={280}>
@@ -193,9 +193,9 @@ const Dashboard = memo(function Dashboard() {
                   <stop offset="95%" stopColor="#14b89e" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="day" stroke="#64748b" fontSize={12} />
-              <YAxis stroke="#64748b" fontSize={12} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(37,150,190,0.1)" />
+              <XAxis dataKey="day" stroke="rgba(60,60,67,0.6)" fontSize={12} />
+              <YAxis stroke="rgba(60,60,67,0.6)" fontSize={12} />
               <Tooltip content={<CustomTooltip />} />
               <Area
                 type="monotone"
@@ -224,18 +224,18 @@ const Dashboard = memo(function Dashboard() {
           transition={{ duration: 0.4, delay: 0.3 }}
           className="glass-card p-6"
         >
-          <h3 className="text-lg font-semibold text-slate-100 mb-6 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-amber-400" />
+          <h3 className="text-lg font-semibold text-[#2596be] mb-6 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-[#fbbf24]" />
             Statusfördelning
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={statusData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis type="number" stroke="#64748b" fontSize={12} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(37,150,190,0.1)" />
+              <XAxis type="number" stroke="rgba(60,60,67,0.6)" fontSize={12} />
               <YAxis
                 type="category"
                 dataKey="name"
-                stroke="#64748b"
+                stroke="rgba(60,60,67,0.6)"
                 fontSize={12}
                 width={100}
               />
@@ -259,8 +259,8 @@ const Dashboard = memo(function Dashboard() {
           transition={{ duration: 0.4, delay: 0.4 }}
           className="glass-card p-6 lg:col-span-2"
         >
-          <h3 className="text-lg font-semibold text-slate-100 mb-6 flex items-center gap-2">
-            <Phone className="w-5 h-5 text-sky-400" />
+          <h3 className="text-lg font-semibold text-[#2596be] mb-6 flex items-center gap-2">
+            <Phone className="w-5 h-5 text-[#0ea5e9]" />
             Operatörsfördelning
           </h3>
           <div className="flex items-center">
@@ -290,9 +290,9 @@ const Dashboard = memo(function Dashboard() {
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: item.color }}
                     />
-                    <span className="text-sm text-slate-300">{item.name}</span>
+                    <span className="text-sm text-[#000000]">{item.name}</span>
                   </div>
-                  <span className="text-sm font-semibold text-slate-200">
+                  <span className="text-sm font-semibold text-[#000000]">
                     {formatNumber(item.value)}
                   </span>
                 </div>
@@ -308,8 +308,8 @@ const Dashboard = memo(function Dashboard() {
           transition={{ duration: 0.4, delay: 0.5 }}
           className="glass-card p-6"
         >
-          <h3 className="text-lg font-semibold text-slate-100 mb-6 flex items-center gap-2">
-            <Target className="w-5 h-5 text-red-400" />
+          <h3 className="text-lg font-semibold text-[#2596be] mb-6 flex items-center gap-2">
+            <Target className="w-5 h-5 text-[#ef4444]" />
             Prioritet
           </h3>
           <ResponsiveContainer width="100%" height={200}>
@@ -338,9 +338,9 @@ const Dashboard = memo(function Dashboard() {
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-slate-400">{item.name}</span>
+                  <span className="text-[rgba(60,60,67,0.6)]">{item.name}</span>
                 </div>
-                <span className="font-medium text-slate-200">{formatNumber(item.value)}</span>
+                <span className="font-medium text-[#000000]">{formatNumber(item.value)}</span>
               </div>
             ))}
           </div>
@@ -354,33 +354,33 @@ const Dashboard = memo(function Dashboard() {
         transition={{ duration: 0.4, delay: 0.6 }}
         className="glass-card p-6"
       >
-        <h3 className="text-lg font-semibold text-slate-100 mb-6">
+        <h3 className="text-lg font-semibold text-[#2596be] mb-6">
           Nyckeltal
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="text-center">
-            <p className="text-3xl font-bold text-brand-400">
+            <p className="text-3xl font-bold text-[#2596be]">
               {formatPercent(stats.engagementRate)}
             </p>
-            <p className="text-sm text-slate-400 mt-1">Engagemangsgrad</p>
+            <p className="text-sm text-[rgba(60,60,67,0.6)] mt-1">Engagemangsgrad</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-sky-400">
+            <p className="text-3xl font-bold text-[#0ea5e9]">
               {formatNumber(stats.contactedCount)}
             </p>
-            <p className="text-sm text-slate-400 mt-1">Samtal gjorda</p>
+            <p className="text-sm text-[rgba(60,60,67,0.6)] mt-1">Samtal gjorda</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-amber-400">
+            <p className="text-3xl font-bold text-[#fbbf24]">
               {formatNumber(stats.interestedCount)}
             </p>
-            <p className="text-sm text-slate-400 mt-1">Intresserade leads</p>
+            <p className="text-sm text-[rgba(60,60,67,0.6)] mt-1">Intresserade leads</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-red-400">
+            <p className="text-3xl font-bold text-[#ef4444]">
               {formatNumber(stats.highPriority)}
             </p>
-            <p className="text-sm text-slate-400 mt-1">Hög prioritet</p>
+            <p className="text-sm text-[rgba(60,60,67,0.6)] mt-1">Hög prioritet</p>
           </div>
         </div>
       </motion.div>

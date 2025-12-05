@@ -454,7 +454,7 @@ export default function App() {
   // ═══════════════════════════════════════════════════════════════════════════
 
   return (
-    <div className="min-h-screen flex bg-slate-950">
+    <div className="min-h-screen flex bg-white">
       {/* Offline indicator */}
       {!isOnline && <OfflineIndicator />}
 
@@ -466,17 +466,17 @@ export default function App() {
             animate={{ width: 280, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="h-screen sticky top-0 flex flex-col border-r border-slate-800/50 bg-slate-900/50 overflow-hidden"
+            className="h-screen sticky top-0 flex flex-col border-r border-[rgba(37,150,190,0.2)] glass-card overflow-hidden"
           >
             {/* Logo */}
-            <div className="p-6 border-b border-slate-800/50">
+            <div className="p-6 border-b border-[rgba(37,150,190,0.2)]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/20">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2596be] to-[#1e7a9c] flex items-center justify-center shadow-lg shadow-[rgba(37,150,190,0.2)]">
                   <span className="text-white font-bold text-lg">R</span>
                 </div>
                 <div>
-                  <h1 className="font-display font-bold text-lg text-slate-100">Ringoptima</h1>
-                  <p className="text-xs text-slate-500">Enterprise v3</p>
+                  <h1 className="font-bold text-lg text-[#2596be]">Ringoptima</h1>
+                  <p className="text-xs text-[rgba(60,60,67,0.6)]">Enterprise v3</p>
                 </div>
               </div>
             </div>
@@ -494,14 +494,14 @@ export default function App() {
                   className={cn(
                     'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all',
                     activeTab === item.id
-                      ? 'bg-brand-500/15 text-brand-400'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                      ? 'bg-[rgba(37,150,190,0.1)] text-[#2596be]'
+                      : 'text-[rgba(60,60,67,0.6)] hover:text-[#000000] hover:bg-[rgba(37,150,190,0.05)]'
                   )}
                 >
                   <item.icon className="w-5 h-5" />
                   <span className="flex-1 text-left font-medium">{item.label}</span>
                   {item.count !== undefined && (
-                    <span className="text-xs bg-slate-800 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-[rgba(37,150,190,0.1)] text-[#2596be] px-2 py-0.5 rounded-full">
                       {formatNumber(item.count)}
                     </span>
                   )}
@@ -509,17 +509,17 @@ export default function App() {
               ))}
             </nav>
 
-            <div className="divider mx-4" />
+            <div className="divider mx-4 border-[rgba(37,150,190,0.2)]" />
 
             {/* Quick Stats */}
             <div className="p-4 space-y-2">
-              <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
+              <h3 className="text-xs font-semibold text-[#2596be] uppercase tracking-wider mb-3">
                 Snabbstatistik
               </h3>
-              <MiniStatCard label="Nya" value={stats.newCount} color="bg-slate-500" />
-              <MiniStatCard label="Kontaktade" value={stats.contactedCount} color="bg-sky-500" />
-              <MiniStatCard label="Intresserade" value={stats.interestedCount} color="bg-amber-500" />
-              <MiniStatCard label="Konverterade" value={stats.convertedCount} color="bg-brand-500" />
+              <MiniStatCard label="Nya" value={stats.newCount} color="#6b7280" />
+              <MiniStatCard label="Kontaktade" value={stats.contactedCount} color="#0ea5e9" />
+              <MiniStatCard label="Intresserade" value={stats.interestedCount} color="#fbbf24" />
+              <MiniStatCard label="Konverterade" value={stats.convertedCount} color="#2596be" />
             </div>
 
             {/* Saved Filters */}
@@ -533,14 +533,14 @@ export default function App() {
             </div>
 
             {/* Sidebar Footer */}
-            <div className="p-4 border-t border-slate-800/50">
+            <div className="p-4 border-t border-[rgba(37,150,190,0.2)]">
               <button
                 onClick={() => setIsCommandPaletteOpen(true)}
-                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-[rgba(60,60,67,0.6)] hover:text-[#000000] hover:bg-[rgba(37,150,190,0.05)] transition-colors"
               >
                 <CommandIcon className="w-4 h-4" />
                 <span className="flex-1 text-left text-sm">Sök kommando</span>
-                <kbd className="text-xs bg-slate-800 px-2 py-0.5 rounded">⌘K</kbd>
+                <kbd className="text-xs bg-[rgba(37,150,190,0.1)] text-[#2596be] px-2 py-0.5 rounded">⌘K</kbd>
               </button>
             </div>
           </motion.aside>
@@ -550,31 +550,31 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50">
-          <div className="flex items-center gap-4 px-6 py-4">
+        <header className="filter-bar">
+          <div className="flex items-center gap-4 px-6 py-4 max-w-[1440px] mx-auto">
             {/* Sidebar toggle */}
             <button
               onClick={toggleSidebar}
               className="btn-icon"
               aria-label={isSidebarOpen ? 'Stäng sidopanel' : 'Öppna sidopanel'}
             >
-              {isSidebarOpen ? <ChevronLeft className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isSidebarOpen ? <ChevronLeft className="w-5 h-5 text-[#2596be]" /> : <Menu className="w-5 h-5 text-[#2596be]" />}
             </button>
 
             {/* Search */}
             <div className="relative flex-1 max-w-xl">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[rgba(60,60,67,0.6)]" />
               <input
                 type="search"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Sök kontakter, företag, stad..."
-                className="w-full pl-11 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-brand-500/50 focus:ring-2 focus:ring-brand-500/20 transition-all"
+                className="search-input w-full pl-11 pr-4 py-2.5"
               />
               {searchInput && (
                 <button
                   onClick={() => setSearchInput('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-slate-700/50 text-slate-400"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-[rgba(37,150,190,0.1)] text-[rgba(60,60,67,0.6)]"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -661,16 +661,16 @@ export default function App() {
           </div>
 
           {/* Results bar */}
-          <div className="flex items-center justify-between px-6 py-2 bg-slate-900/50 text-sm">
-            <span className="text-slate-400">
-              Visar <span className="text-slate-200 font-medium">{formatNumber(filteredContacts.length)}</span> av {formatNumber(contacts.length)} kontakter
+          <div className="flex items-center justify-between px-6 py-2 bg-[rgba(255,255,255,0.6)] backdrop-blur-[10px] text-sm border-t border-[rgba(37,150,190,0.2)]">
+            <span className="text-[rgba(60,60,67,0.6)]">
+              Visar <span className="text-[#000000] font-medium">{formatNumber(filteredContacts.length)}</span> av {formatNumber(contacts.length)} kontakter
             </span>
             <div className="flex items-center gap-2">
-              <span className="text-slate-500">Sortering:</span>
+              <span className="text-[rgba(60,60,67,0.6)]">Sortering:</span>
               <select
                 value={filter.sort}
                 onChange={(e) => setFilter({ sort: e.target.value as any })}
-                className="bg-transparent text-slate-300 border-none focus:outline-none cursor-pointer"
+                className="bg-transparent text-[#000000] border-none focus:outline-none cursor-pointer"
               >
                 {SORT_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -683,14 +683,14 @@ export default function App() {
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-white">
           {activeTab === 'dashboard' ? (
             <Suspense fallback={<PageLoading />}>
               <Dashboard />
             </Suspense>
           ) : activeTab === 'batches' ? (
-            <div className="p-6">
-              <h2 className="text-xl font-bold text-slate-100 mb-6">Importerade listor</h2>
+            <div className="p-6 max-w-[1440px] mx-auto">
+              <h2 className="text-xl font-bold text-[#2596be] mb-6">Importerade listor</h2>
               {batches.length === 0 ? (
                 <EmptyState
                   icon={<FolderOpen className="w-12 h-12" />}
@@ -714,26 +714,26 @@ export default function App() {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-3 rounded-xl bg-violet-500/15 text-violet-400">
+                          <div className="p-3 rounded-xl bg-[rgba(118,93,182,0.15)] text-[#765db6]">
                             <FolderOpen className="w-5 h-5" />
                           </div>
                           <div>
-                            <h3 className="font-semibold text-slate-200">{batch.name}</h3>
-                            <p className="text-sm text-slate-400">{batch.fileName}</p>
+                            <h3 className="font-semibold text-[#000000]">{batch.name}</h3>
+                            <p className="text-sm text-[rgba(60,60,67,0.6)]">{batch.fileName}</p>
                           </div>
                         </div>
                         <button
                           onClick={() => batch.id && handleDeleteBatch(batch.id)}
-                          className="btn-icon text-slate-400 hover:text-red-400"
+                          className="btn-icon text-[rgba(60,60,67,0.6)] hover:text-[#ef4444]"
                         >
                           <X className="w-4 h-4" />
                         </button>
                       </div>
-                      <div className="mt-4 pt-4 border-t border-slate-800/50 flex items-center justify-between">
-                        <span className="text-2xl font-bold text-brand-400">
+                      <div className="mt-4 pt-4 border-t border-[rgba(37,150,190,0.2)] flex items-center justify-between">
+                        <span className="text-2xl font-bold text-[#2596be]">
                           {formatNumber(batch.count)}
                         </span>
-                        <span className="text-sm text-slate-500">kontakter</span>
+                        <span className="text-sm text-[rgba(60,60,67,0.6)]">kontakter</span>
                       </div>
                     </motion.div>
                   ))}
@@ -764,13 +764,41 @@ export default function App() {
               }
             />
           ) : (
-            <div className="divide-y divide-slate-800/50">
+            <div className="p-6 max-w-[1440px] mx-auto">
+              {/* Column Headers */}
+              <div className="contact-card-grid mb-4 pb-3 border-b border-[rgba(37,150,190,0.2)]">
+                <div className="contact-card-column">
+                  <div className="column-header">Företag</div>
+                </div>
+                <div className="contact-card-column">
+                  <div className="column-header">Kontakt</div>
+                </div>
+                <div className="contact-card-column">
+                  <div className="column-header">Telefon</div>
+                </div>
+                <div className="contact-card-column">
+                  <div className="column-header">Användare</div>
+                </div>
+                <div className="contact-card-column">
+                  <div className="column-header">Operatör</div>
+                </div>
+                <div className="contact-card-column">
+                  <div className="column-header">Status</div>
+                </div>
+                <div className="contact-card-column">
+                  <div className="column-header">Åtgärder</div>
+                </div>
+              </div>
+              
+              {/* Contact Cards */}
               {filteredContacts.map((contact, i) => (
                 <ContactCard
                   key={contact.id}
                   contact={contact}
                   onClick={handleContactClick}
                   onCall={handleCall}
+                  onEdit={handleContactClick}
+                  onDelete={removeContact}
                   delay={i < 20 ? i : 0}
                 />
               ))}

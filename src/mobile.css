@@ -13,10 +13,10 @@
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(11, 17, 33, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(37, 150, 190, 0.2);
   padding-bottom: var(--safe-area-bottom);
 }
 
@@ -35,12 +35,12 @@
   justify-content: center;
   gap: 4px;
   padding: 8px 16px;
-  color: var(--color-text-muted);
+  color: rgba(60, 60, 67, 0.6);
   background: none;
   border: none;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+  border-radius: 12px;
   min-width: 64px;
 }
 
@@ -49,11 +49,11 @@
 }
 
 .mobile-nav-item.active {
-  color: var(--color-brand-400);
+  color: #2596be;
 }
 
 .mobile-nav-item.active .mobile-nav-icon {
-  color: var(--color-brand-400);
+  color: #2596be;
 }
 
 .mobile-nav-icon {
@@ -82,15 +82,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-600));
+  background: linear-gradient(135deg, #2596be, #1e7a9c);
   border: none;
   border-radius: 50%;
   color: white;
   cursor: pointer;
   box-shadow: 
-    0 4px 12px rgba(20, 184, 158, 0.4),
-    0 0 0 4px rgba(11, 17, 33, 0.9);
-  transition: all var(--transition-base);
+    0 4px 12px rgba(37, 150, 190, 0.4),
+    0 0 0 4px rgba(255, 255, 255, 0.9);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-nav-fab:active {
@@ -110,10 +110,10 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(11, 17, 33, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(37, 150, 190, 0.2);
   padding-top: var(--safe-area-top);
 }
 
@@ -126,15 +126,15 @@
 }
 
 .mobile-header-title {
-  font-family: 'Clash Display', 'DM Sans', sans-serif;
+  font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: #2596be;
 }
 
 .mobile-header-subtitle {
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: rgba(60, 60, 67, 0.6);
 }
 
 .mobile-header-actions {
@@ -149,8 +149,10 @@
 
 .mobile-filter-bar {
   padding: var(--space-sm) var(--space-md);
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-bottom: 1px solid rgba(37, 150, 190, 0.2);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -171,15 +173,17 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: var(--color-surface);
-  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(60, 60, 67, 0.6);
   font-size: 0.8125rem;
   font-weight: 500;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
+  border: 1px solid rgba(37, 150, 190, 0.2);
+  border-radius: 20px;
   white-space: nowrap;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .mobile-filter-chip:active {
@@ -187,9 +191,9 @@
 }
 
 .mobile-filter-chip.active {
-  background: rgba(20, 184, 158, 0.15);
-  color: var(--color-brand-400);
-  border-color: var(--color-brand-500);
+  background: rgba(37, 150, 190, 0.15);
+  color: #2596be;
+  border-color: #2596be;
 }
 
 .mobile-filter-chip-icon {
@@ -206,14 +210,16 @@
   align-items: flex-start;
   gap: var(--space-md);
   padding: var(--space-md);
-  background: var(--color-bg-card);
-  border-bottom: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(37, 150, 190, 0.2);
   cursor: pointer;
-  transition: background var(--transition-fast);
+  transition: background 0.2s ease;
 }
 
 .mobile-contact-card:active {
-  background: var(--color-surface-active);
+  background: rgba(37, 150, 190, 0.05);
 }
 
 .mobile-contact-avatar {
@@ -222,8 +228,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-700));
-  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #2596be, #1e7a9c);
+  border-radius: 12px;
   color: white;
   font-weight: 700;
   font-size: 1rem;
@@ -246,7 +252,7 @@
 .mobile-contact-name {
   font-weight: 600;
   font-size: 0.9375rem;
-  color: var(--color-text-primary);
+  color: #000000;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -257,7 +263,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: rgba(60, 60, 67, 0.6);
 }
 
 .mobile-contact-meta {
@@ -265,7 +271,7 @@
   align-items: center;
   gap: var(--space-sm);
   font-size: 0.8125rem;
-  color: var(--color-text-secondary);
+  color: rgba(60, 60, 67, 0.6);
 }
 
 .mobile-contact-meta-item {
@@ -293,17 +299,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-brand-500);
+  background: #2596be;
   border: none;
   border-radius: 50%;
   color: white;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .mobile-contact-call-btn:active {
   transform: scale(0.95);
-  background: var(--color-brand-600);
+  background: #1e7a9c;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -312,7 +318,9 @@
 
 .mobile-search-container {
   padding: var(--space-md);
-  background: var(--color-bg-secondary);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
 }
 
 .mobile-search-input-wrapper {
@@ -333,22 +341,25 @@
 .mobile-search-input {
   width: 100%;
   padding: 12px 12px 12px 44px;
-  background: var(--color-surface);
-  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #000000;
   font-size: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  transition: all var(--transition-fast);
+  border: 1px solid rgba(37, 150, 190, 0.2);
+  border-radius: 12px;
+  transition: all 0.2s ease;
 }
 
 .mobile-search-input::placeholder {
-  color: var(--color-text-muted);
+  color: rgba(60, 60, 67, 0.4);
 }
 
 .mobile-search-input:focus {
   outline: none;
-  border-color: var(--color-brand-500);
-  box-shadow: 0 0 0 3px rgba(20, 184, 158, 0.15);
+  border-color: #2596be;
+  box-shadow: 0 0 0 4px rgba(37, 150, 190, 0.1);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .mobile-search-clear {
@@ -386,9 +397,9 @@
   right: 0;
   z-index: 201;
   max-height: 90vh;
-  background: var(--color-bg-secondary);
-  border-top-left-radius: var(--radius-2xl);
-  border-top-right-radius: var(--radius-2xl);
+  background: #ffffff;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
   padding-bottom: var(--safe-area-bottom);
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
@@ -414,13 +425,13 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-sm) var(--space-md) var(--space-md);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(37, 150, 190, 0.2);
 }
 
 .mobile-modal-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: #2596be;
 }
 
 .mobile-modal-close {
@@ -429,10 +440,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: none;
   border-radius: 50%;
-  color: var(--color-text-muted);
+  color: rgba(60, 60, 67, 0.6);
   cursor: pointer;
 }
 
